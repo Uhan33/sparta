@@ -46,8 +46,6 @@ let handleSearch = (event) => {
     let search = document.getElementById("search-input").value;
     let array = [];
 
-    console.log(cardList.children[0].id);
-
     for (let i = 0; i < cardList.children.length; i++) {
         array[i] = cardList.children[i];
     }
@@ -71,8 +69,7 @@ let handleSearch = (event) => {
         document.getElementById(e.id).style.display = "none"
         for(let i = 0; i < filtering(array,search).length; i++) {
             if(e.id === filtering(array, search)[i].id) {
-                document.getElementById(array[i].id).style.display = "block";
-                continue;
+                document.getElementById(e.id).style.display = "block";
             }
         }
     });
@@ -82,7 +79,4 @@ let handleSearch = (event) => {
     //     array[i].getElementsByClassName("movie-title")[0].innerHTML.toUpperCase().includes(search.toUpperCase()) ? 
     //     document.getElementById(array[i].id).style.display = 'block' : document.getElementById(array[i].id).style.display = 'none';
     // }
-
-
-
 }
