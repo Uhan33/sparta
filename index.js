@@ -7,7 +7,6 @@ const options = {
 };
 
 const imageUrl = "https://image.tmdb.org/t/p/w500";
-const array1 = [];
 
 // let list = fetch('https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1', options)
 //     .then(response => response.json())
@@ -20,10 +19,6 @@ const getData = async () => {
         const res = await fetch('https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1', options);
         const data = await res.json();
         console.log(data);
-
-        data.results.forEach(e => {
-            array1.push(e);
-        });
 
         for (let i = 0; i < data.results.length; i++) {
             const card =
@@ -45,32 +40,47 @@ const getData = async () => {
 getData();
 
 let handleSearch = (event) => {
-    let cardList = document.getElementsById("cardList");
-    console.log(cardList);
-
+    // onSubmit으로 인한 새로고침 방지용 메소드
     event.preventDefault();
+    let cardList = document.getElementById("cardList");
     let search = document.getElementById("search-input").value;
+    let array = [];
 
-    let testfilter = (array, search) => {
+    console.log(cardList.children[0].id);
+
+    for (let i = 0; i < cardList.children.length; i++) {
+        array[i] = cardList.children[i];
+    }
+
+    // serach로 검색한 단어에 포함되는 title만 필터링 해주는 함수
+    let filtering = (array, search) => {
         return array.filter(
-            (arr) => arr.title.toUpperCase().includes(search.toUpperCase()),
+            (arr) => arr.getElementsByClassName("movie-title")[0].innerHTML.toUpperCase().includes(search.toUpperCase()),
         )
     };
 
-    // filter를 사용하기 위한 강제 이중 포문
-    for (let i = 0; i < array1.length; i++) {
-        document.getElementById(array1[i].id).style.display = "none";
-        for (let j = 0; j < testfilter(array1, search).length; j++) {
-            if (array1[i].id === testfilter(array1, search)[j].id) {
-                document.getElementById(array1[i].id).style.display = "block";
+    // search로 검색받은 div 콘솔에 출력
+    console.log(filtering(array, search));
+
+    /* 
+    카드 요소를 하나씩 돌리면서 기본을 none으로 만들어준 뒤,
+    필터링된 id라면 block으로 보여지게 변경.
+    forEach를 사용하기위해 이중 for문 사용
+    */
+    array.forEach(e => {
+        document.getElementById(e.id).style.display = "none"
+        for(let i = 0; i < filtering(array,search).length; i++) {
+            if(e.id === filtering(array, search)[i].id) {
+                document.getElementById(array[i].id).style.display = "block";
+                continue;
             }
         }
-    }
+    });
 
-    // 간단한 다른 방법..
-    // for(let i in array1) {
-    //     array1[i].title.toUpperCase().includes(search.toUpperCase()) ? 
-    //     document.getElementById(array1[i].id).style.display = 'block' : document.getElementById(array1[i].id).style.display = 'none';
+    //간단한 다른 방법..
+    // for(let i in array) {
+    //     array[i].getElementsByClassName("movie-title")[0].innerHTML.toUpperCase().includes(search.toUpperCase()) ? 
+    //     document.getElementById(array[i].id).style.display = 'block' : document.getElementById(array[i].id).style.display = 'none';
     // }
 
 
