@@ -74,7 +74,7 @@ let handleSearch = (event) => {
         }
     });
 
-    //간단한 다른 방법..
+    // 간단한 다른 방법..
     // for(let i in array) {
     //     array[i].getElementsByClassName("movie-title")[0].innerHTML.toUpperCase().includes(search.toUpperCase()) ? 
     //     document.getElementById(array[i].id).style.display = 'block' : document.getElementById(array[i].id).style.display = 'none';
